@@ -32,7 +32,7 @@ The AI Geometry Skill is a deterministic, headless geometry verification and res
 
 ### Local Setup
 ```bash
-git clone https://github.com/google-ai-studio/ai-geometry-skill.git
+git clone https://github.com/a50kv109/ai-geometry-skill.git
 cd ai-geometry-skill
 npm install
 ```
