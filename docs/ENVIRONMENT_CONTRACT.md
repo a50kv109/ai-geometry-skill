@@ -1,6 +1,12 @@
-# Geometry Verification Stand — Environment Contract
+# Geometry Verification Stand — Environment Contract (LEGACY)
 
-This document specifies the interface and operational contract provided by `GeometryEnvironment` (`src/environment/GeometryEnvironment.ts`).
+> **Document Status**: `LEGACY / HISTORICAL ENVIRONMENT API`  
+> **Notice for External AI Agents**: `HeadlessGeometrySession` (`src/headless/HeadlessGeometrySession.ts`) is the **sole canonical headless runtime API** for AI Geometry Skill v1.0.0.  
+> `GeometryEnvironment` is preserved strictly for historical lineage and baseline contract test suites. External agents should refer to [`docs/SKILL_CONTRACT.md`](./SKILL_CONTRACT.md) for current public API operations.
+
+---
+
+This document specifies the legacy interface and operational contract provided by `GeometryEnvironment` (`src/environment/GeometryEnvironment.ts`).
 
 ---
 

@@ -1,5 +1,9 @@
 // examples/agentQuickstart.ts
-// Example: External AI Agent interacting with the Geometry Reasoning Stand
+// [LEGACY / HISTORICAL API EXAMPLE]
+// Notice for External AI Agents:
+// HeadlessGeometrySession is the canonical runtime API for AI Geometry Skill v1.0.0.
+// See: examples/basic-verification/index.ts for the canonical example.
+// This example demonstrates the legacy GeometryEnvironment for backward compatibility.
 
 import { GeometryEnvironment } from '../src/environment/GeometryEnvironment';
 import { FactMap } from '../src/kernel/types';

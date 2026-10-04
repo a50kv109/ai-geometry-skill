@@ -17,16 +17,18 @@
 
 ## 2. Public Action Set
 
-The external reasoning agent interacts solely via the following discrete commands:
+The external reasoning agent interacts solely via the following discrete commands in `HeadlessGeometrySession`:
 - `create_point(x, y, options?)`: Creates an analytical point.
 - `connect(p1Id, p2Id, type)`: Constructs a `SEGMENT` or infinite `LINE`.
 - `create_circle(centerId, radius)`: Creates a Euclidean circle.
 - `construct(macroType, params)`: Executes deterministic macro constructions (`PERPENDICULAR`, `PARALLEL`, `ANGLE_BISECTOR`, `PERPENDICULAR_BISECTOR`).
-- `intersect(id1, id2)`: Solves analytical intersection equations (`LINE x LINE`, `LINE x CIRCLE`, `SEGMENT x SEGMENT`, etc.).
-- `move(pointId, x, y)`: Kinematically displaces a free vertex and cascades dependent geometry.
+- `intersect(id1, id2)`: Solves analytical intersection equations (`LINE x LINE`, `LINE x CIRCLE`, `SEGMENT x SEGMENT`, etc.) and returns materialized point snapshots.
+- `move(pointId, x, y)`: Kinematically displaces a free vertex and cascades dependent macro geometry.
 - `erase(entityId)`: Deletes an entity and cascades deletion to derived dependents.
 - `reset()`: Clears active geometry to the initial profile baseline.
 - `fork()` & `rollback(sandboxId)`: Creates isolated scratchpads for exploratory reasoning.
+- `exportSolutionArtifact()`: Packages state, provenance, and certified claims into a GSA v0.1.0 container.
+- `importSolutionArtifact(artifact)`: Imports a GSA container and executes local Zero-Trust verification.
 
 ---
 
