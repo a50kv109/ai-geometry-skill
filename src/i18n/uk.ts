@@ -1,5 +1,5 @@
 // src/i18n/uk.ts
-// Ukrainian language pack for Geometry Reasoning Stand V2
+// Ukrainian language pack for AI Geometry Skill
 // Natural modern Ukrainian geometry terminology (шкільна та вища геометрія)
 
 export const uk: Record<string, string> = {

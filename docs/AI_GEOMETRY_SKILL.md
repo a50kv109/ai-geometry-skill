@@ -114,6 +114,7 @@ The following boundaries are documented as non-blocking capability gaps for v1.0
 | Document | Purpose |
 |:---|:---|
 | [AI_GEOMETRY_SKILL.md](./AI_GEOMETRY_SKILL.md) | **This document**: Unified entry point and release map |
+| [AI_GEOMETRY_SKILL_PASSPORT.md](./AI_GEOMETRY_SKILL_PASSPORT.md) | Immutable Skill Passport v0.1 (identity, capabilities, boundaries, policy) |
 | [AGENT_GUIDANCE_DRA.md](./AGENT_GUIDANCE_DRA.md) | Recommended agent reasoning pattern (DRA) |
 | [ENVIRONMENT_CONTRACT.md](./ENVIRONMENT_CONTRACT.md) | Environment contract and invariants |
 | [VERIFICATION.md](./VERIFICATION.md) | Verification engine and receiver-owned tolerances |

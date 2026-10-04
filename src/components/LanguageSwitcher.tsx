@@ -1,5 +1,5 @@
 // src/components/LanguageSwitcher.tsx
-// Universal language switcher (RU | UA | EN) for Geometry Reasoning Stand V2
+// Universal language switcher (RU | UA | EN) for AI Geometry Skill
 
 import React from 'react';
 import { useI18n, Locale } from '../i18n';

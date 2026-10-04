@@ -1,5 +1,5 @@
 // src/i18n/index.tsx
-// Core Internationalization Layer for Geometry Reasoning Stand V2
+// Core Internationalization Layer for AI Geometry Skill
 // Principles:
 // 1. "Language may be ambiguous. Engineering Core must not be."
 // 2. Pure typed dictionary translation without heavy external dependencies.

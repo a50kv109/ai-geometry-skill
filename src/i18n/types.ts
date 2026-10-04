@@ -1,5 +1,5 @@
 // src/i18n/types.ts
-// Strict typing for Geometry Reasoning Stand V2 Internationalization Layer
+// Strict typing for AI Geometry Skill Internationalization Layer
 
 export type Locale = 'ru' | 'uk' | 'en';
 

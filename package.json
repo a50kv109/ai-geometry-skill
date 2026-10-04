@@ -1,7 +1,7 @@
 {
-  "name": "geometry-reasoning-stand-2",
-  "version": "2.1.0",
-  "description": "Deterministic geometry learning and reasoning verification stand for humans and AI agents.",
+  "name": "ai-geometry-skill",
+  "version": "1.0.0",
+  "description": "Deterministic, headless geometry verification and research instrument for external AI agents.",
   "license": "MIT",
   "private": true,
   "type": "module",

@@ -1,4 +1,4 @@
-# AI Coding Agent Guidelines — Geometry Reasoning Stand
+# AI Coding Agent Guidelines — AI Geometry Skill
 
 This document establishes non-negotiable architectural and engineering rules for AI coding agents modifying or extending this repository.
 
@@ -6,7 +6,7 @@ This document establishes non-negotiable architectural and engineering rules for
 
 ## 1. Project Purpose & Scope
 
-The **Geometry Reasoning Stand** is a deterministic verification environment for geometric reasoning.
+The **AI Geometry Skill** is a deterministic verification and research instrument for geometric reasoning.
 - **Principle**: *"The agent may be wrong. The stand must not be."*
 - Mathematical truth is deterministic and provable via analytical geometry and formal theorems.
 - Avoid introducing probabilistic AI logic, heuristic approximations, or LLM-based solvers into the core mathematical kernel.

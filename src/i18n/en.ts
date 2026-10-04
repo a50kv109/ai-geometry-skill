@@ -1,5 +1,5 @@
 // src/i18n/en.ts
-// English language pack for Geometry Reasoning Stand V2
+// English language pack for AI Geometry Skill
 // High-grade international technical geometry terminology
 
 export const en: Record<string, string> = {

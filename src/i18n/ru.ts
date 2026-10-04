@@ -1,5 +1,5 @@
 // src/i18n/ru.ts
-// Russian language pack for Geometry Reasoning Stand V2
+// Russian language pack for AI Geometry Skill
 
 export const ru: Record<string, string> = {
   // Common UI actions and terms

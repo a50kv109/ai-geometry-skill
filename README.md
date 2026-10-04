@@ -1,4 +1,4 @@
-# AI Geometry Skill & Reasoning Stand v1.0.0
+# AI Geometry Skill v1.0.0
 
 > **System Version**: `v1.0.0`  
 > **Status**: `FROZEN RESEARCH TOOL`  
@@ -219,6 +219,7 @@ npx tsx examples/basic-verification/index.ts
 All documentation is located in the [`docs/`](./docs/) directory using relative Markdown links:
 
 - [`docs/AI_GEOMETRY_SKILL.md`](./docs/AI_GEOMETRY_SKILL.md) — Canonical navigational entry point.
+- [`docs/AI_GEOMETRY_SKILL_PASSPORT.md`](./docs/AI_GEOMETRY_SKILL_PASSPORT.md) — Immutable Skill Passport v0.1 (identity, capabilities, boundaries, policies).
 - [`docs/SKILL_CONTRACT.md`](./docs/SKILL_CONTRACT.md) — Semantic Contract v0.4 specifications.
 - [`docs/CAPABILITY_MODEL.md`](./docs/CAPABILITY_MODEL.md) — Supported vs unsupported capabilities.
 - [`docs/AGENT_GUIDANCE_DRA.md`](./docs/AGENT_GUIDANCE_DRA.md) — Recommended agent reasoning pattern (DRA).
@@ -230,6 +231,12 @@ All documentation is located in the [`docs/`](./docs/) directory using relative 
 
 ---
 
-## 13. License
+## 13. Project Lineage
+
+AI Geometry Skill was developed from the Geometry Reasoning Stand research architecture and extracted as a standalone agent-facing instrument. Historical developmental materials, evolution notes, and earlier milestone documents are preserved in [`docs/archive/`](./docs/archive/) for academic reproducibility and lineage tracing.
+
+---
+
+## 14. License
 
 Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
