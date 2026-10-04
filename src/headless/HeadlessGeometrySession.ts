@@ -42,8 +42,10 @@ import {
   ObservationMode,
   ObservationResult,
   ProvenanceObservation,
+  FullObservation,
   VerificationRelationType,
   HeadlessVerificationResult,
+  MeasureResult,
   GSASolutionArtifact,
   GSAImportReport,
   GSACertifiedClaim,
@@ -182,8 +184,26 @@ export class HeadlessGeometrySession {
   public create_point(
     x: number,
     y: number,
-    options?: { on_circle?: boolean; id?: string; name?: string }
+    options?: { on_circle?: boolean; id?: string; name?: string; z?: number }
   ): CompactActionResponse {
+    // 0. 3D / Z capability gap check
+    if (
+      (options as any)?.z !== undefined ||
+      (arguments.length > 2 && typeof arguments[2] === 'number')
+    ) {
+      return {
+        success: false,
+        action: 'CREATE_POINT',
+        stateChanged: false,
+        created: [],
+        mutated: [],
+        deleted: [],
+        error: '3D coordinates (z) are not supported in 2D Planar Geometry.',
+        errorCode: 'CAPABILITY_GAP',
+        deltaDigest: this.buildDeltaDigest(),
+      };
+    }
+
     // 1. Skill Input Sanitization
     if (!this.isFiniteNumber(x) || !this.isFiniteNumber(y)) {
       return {
@@ -195,6 +215,21 @@ export class HeadlessGeometrySession {
         deleted: [],
         error: `Invalid coordinates: x=${x}, y=${y}. Coordinates must be finite numbers.`,
         errorCode: 'INVALID_NUMERIC_INPUT',
+        deltaDigest: this.buildDeltaDigest(),
+      };
+    }
+
+    // Duplicate ID check: state unchanged, return DUPLICATE_ID
+    if (options?.id && this.state.points[options.id]) {
+      return {
+        success: false,
+        action: 'CREATE_POINT',
+        stateChanged: false,
+        created: [],
+        mutated: [],
+        deleted: [],
+        error: `Point with id '${options.id}' already exists.`,
+        errorCode: 'DUPLICATE_ID',
         deltaDigest: this.buildDeltaDigest(),
       };
     }
@@ -262,6 +297,39 @@ export class HeadlessGeometrySession {
         errorCode: 'POINTS_COINCIDENT',
         deltaDigest: this.buildDeltaDigest(),
       };
+    }
+
+    // Duplicate connect idempotency: return existing segment/line ID without creating ghost duplicate
+    if (type === 'SEGMENT') {
+      const existingSeg = Object.values(this.state.segments).find(
+        (s) => (s.p1Id === p1Id && s.p2Id === p2Id) || (s.p1Id === p2Id && s.p2Id === p1Id)
+      );
+      if (existingSeg) {
+        return {
+          success: true,
+          action: 'CONNECT',
+          stateChanged: false,
+          created: [{ id: existingSeg.id, type: 'SEGMENT', role: existingSeg.role || 'primary' }],
+          mutated: [],
+          deleted: [],
+          deltaDigest: this.buildDeltaDigest(),
+        };
+      }
+    } else {
+      const existingLine = Object.values(this.state.lines).find(
+        (l) => (l.p1Id === p1Id && l.p2Id === p2Id) || (l.p1Id === p2Id && l.p2Id === p1Id)
+      );
+      if (existingLine) {
+        return {
+          success: true,
+          action: 'CONNECT',
+          stateChanged: false,
+          created: [{ id: existingLine.id, type: 'LINE', role: existingLine.role || 'primary' }],
+          mutated: [],
+          deleted: [],
+          deltaDigest: this.buildDeltaDigest(),
+        };
+      }
     }
 
     // 2. Dispatch to Core reducer
@@ -551,7 +619,7 @@ export class HeadlessGeometrySession {
 
     if (pointsFound.length === 0) {
       return {
-        success: true,
+        success: false,
         action: 'INTERSECT',
         stateChanged: false,
         created: [],
@@ -742,6 +810,16 @@ export class HeadlessGeometrySession {
         };
       }
 
+      case 'FULL': {
+        return {
+          mode: 'FULL',
+          points: this.state.points,
+          segments: this.state.segments,
+          lines: this.state.lines,
+          circles: this.state.circles,
+        };
+      }
+
       case 'OBJECT': {
         if (!targetId) {
           return { mode: 'OBJECT', targetId: '', found: false };
@@ -885,11 +963,34 @@ export class HeadlessGeometrySession {
   // 6. MEASUREMENTS (Facade over Core Semantic Quantities)
   // --------------------------------------------------------------------------
 
-  public measure(targetId: string, metricType?: string): GSAMeasurementRecord[] {
+  public measure(targetId: string, metricType?: string): MeasureResult {
+    const supportedMetrics = ['SEGMENT_LENGTH', 'RADIUS'];
+    if (metricType && !supportedMetrics.includes(metricType)) {
+      return {
+        success: false,
+        errorCode: 'CAPABILITY_GAP',
+        error: `Unsupported measurement type '${metricType}'. Supported: ${supportedMetrics.join(', ')}`,
+        records: [],
+      };
+    }
+
+    const pt = this.state.points[targetId];
+    const seg = this.state.segments[targetId];
+    const circ = this.state.circles[targetId];
+    const line = this.state.lines[targetId];
+
+    if (!pt && !seg && !circ && !line) {
+      return {
+        success: false,
+        errorCode: 'ENTITY_NOT_FOUND',
+        error: `Entity '${targetId}' not found for measurement.`,
+        records: [],
+      };
+    }
+
     const records: GSAMeasurementRecord[] = [];
 
     // 1. Direct analytical query on state primitives for unrounded mathematical truth
-    const seg = this.state.segments[targetId];
     if (seg) {
       if (!metricType || metricType === 'SEGMENT_LENGTH') {
         records.push({
@@ -901,7 +1002,6 @@ export class HeadlessGeometrySession {
       }
     }
 
-    const circ = this.state.circles[targetId];
     if (circ) {
       if (!metricType || metricType === 'RADIUS') {
         records.push({
@@ -914,12 +1014,15 @@ export class HeadlessGeometrySession {
     }
 
     if (records.length > 0) {
-      return records;
+      return {
+        success: true,
+        records,
+      };
     }
 
     // 2. Fall back to extracted semantic quantities (e.g. angles, ratios, derived arcs)
     const quantities = extractSemanticQuantities(this.state);
-    return quantities
+    const matched = quantities
       .filter((q) => {
         const targetMatch =
           q.context.entityId === targetId ||
@@ -935,6 +1038,20 @@ export class HeadlessGeometrySession {
         value: q.value,
         unit: q.unit,
       }));
+
+    if (matched.length > 0) {
+      return {
+        success: true,
+        records: matched,
+      };
+    }
+
+    return {
+      success: false,
+      errorCode: 'CAPABILITY_GAP',
+      error: `No measurements available for entity '${targetId}' with type '${metricType || 'ANY'}'.`,
+      records: [],
+    };
   }
 
   // --------------------------------------------------------------------------
@@ -947,6 +1064,25 @@ export class HeadlessGeometrySession {
     referenceId?: string
   ): HeadlessVerificationResult {
     const EPS = HeadlessGeometrySession.VERIFICATION_EPSILON;
+
+    const validRelations: VerificationRelationType[] = [
+      'PERPENDICULAR_TO',
+      'PARALLEL_TO',
+      'EQUAL_LENGTH',
+      'POINT_ON_CIRCLE',
+    ];
+
+    if (!validRelations.includes(relationType as any)) {
+      return {
+        verified: false,
+        relation: relationType,
+        subjectId,
+        referenceId,
+        explanation: `Unsupported predicate: '${relationType}'. Supported predicates: ${validRelations.join(', ')}`,
+        errorCode: 'CAPABILITY_GAP',
+        threshold: EPS,
+      };
+    }
 
     const getVector = (id: string): { dx: number; dy: number; len: number } | null => {
       const seg = this.state.segments[id];

@@ -3,7 +3,7 @@
 // Strictly aligns with AI GEOMETRY SKILL CONTRACT v0.3
 // "REASON OUTSIDE. VERIFY INSIDE."
 
-import { FullGeometryState, GeometryProvenance } from '../engines/constructionCore';
+import { FullGeometryState, GeometryProvenance, GeometryPoint, GeometrySegment, GeometryLine, GeometryCircle } from '../engines/constructionCore';
 import { PGS2DPassport } from '../engines/pgs/types';
 import { SemanticQuantity } from '../engines/configuration/semanticQuantity';
 import { SemanticRelation } from '../engines/configuration/semanticRelation';
@@ -55,6 +55,8 @@ export interface CompactActionResponse {
 
 export type HeadlessErrorCode =
   | 'INVALID_NUMERIC_INPUT'
+  | 'DUPLICATE_ID'
+  | 'CAPABILITY_GAP'
   | 'ENTITY_NOT_FOUND'
   | 'POINTS_COINCIDENT'
   | 'DEGENERATE_LINE'
@@ -64,11 +66,14 @@ export type HeadlessErrorCode =
   | 'IMMUTABLE_BASE_OBJECT'
   | 'SANDBOX_NOT_FOUND'
   | 'UNKNOWN_ACTION'
+  | 'UNKNOWN_PREDICATE'
+  | 'UNKNOWN_MEASURE'
   | 'INVALID_ARTIFACT_SCHEMA'
   | 'INCOMPATIBLE_ARTIFACT_VERSION';
 
 export type ObservationMode =
   | 'COMPACT'
+  | 'FULL'
   | 'OBJECT'
   | 'RELATIONS'
   | 'CONSTRAINTS'
@@ -89,6 +94,14 @@ export interface CompactObservation {
     lines: string[];
     circles: string[];
   };
+}
+
+export interface FullObservation {
+  mode: 'FULL';
+  points: Record<string, GeometryPoint>;
+  segments: Record<string, GeometrySegment>;
+  lines: Record<string, GeometryLine>;
+  circles: Record<string, GeometryCircle>;
 }
 
 export interface ObjectObservation {
@@ -144,6 +157,7 @@ export interface ProvenanceObservation {
 
 export type ObservationResult =
   | CompactObservation
+  | FullObservation
   | ObjectObservation
   | RelationsObservation
   | ConstraintsObservation
@@ -164,6 +178,14 @@ export interface HeadlessVerificationResult {
   explanation: string;
   difference?: number;
   threshold: number;
+  errorCode?: HeadlessErrorCode;
+}
+
+export interface MeasureResult {
+  success: boolean;
+  errorCode?: HeadlessErrorCode;
+  error?: string;
+  records: GSAMeasurementRecord[];
 }
 
 export interface GSAProvenanceRecord {

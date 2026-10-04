@@ -25,9 +25,13 @@ console.log(`  - Points created: A(0,0), B(4,0), C(0,3)`);
 console.log(`  - Segments connected: AB (${segAB}), AC (${segAC}), BC (${segBC})`);
 
 // 3. Take Measurements
-const lenAB = session.measure(segAB, 'SEGMENT_LENGTH')[0].value;
-const lenAC = session.measure(segAC, 'SEGMENT_LENGTH')[0].value;
-const lenBC = session.measure(segBC, 'SEGMENT_LENGTH')[0].value;
+const resAB = session.measure(segAB, 'SEGMENT_LENGTH');
+const resAC = session.measure(segAC, 'SEGMENT_LENGTH');
+const resBC = session.measure(segBC, 'SEGMENT_LENGTH');
+
+const lenAB = resAB.records[0]?.value;
+const lenAC = resAC.records[0]?.value;
+const lenBC = resBC.records[0]?.value;
 
 console.log('\n[Step 2] Measuring metrics:');
 console.log(`  - |AB| = ${lenAB}`);

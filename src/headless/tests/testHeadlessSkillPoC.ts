@@ -77,9 +77,9 @@ const mAB = session.measure(segABId, 'SEGMENT_LENGTH');
 const mBC = session.measure(segBCId, 'SEGMENT_LENGTH');
 const mCA = session.measure(segCAId, 'SEGMENT_LENGTH');
 
-assert(mAB.length > 0 && Math.abs(mAB[0].value - 4) < 1e-4, `D.1: AB length measured 4.0 (got ${mAB[0]?.value})`);
-assert(mBC.length > 0 && Math.abs(mBC[0].value - 5) < 1e-4, `D.2: BC hypotenuse measured 5.0 (got ${mBC[0]?.value})`);
-assert(mCA.length > 0 && Math.abs(mCA[0].value - 3) < 1e-4, `D.3: CA length measured 3.0 (got ${mCA[0]?.value})`);
+assert(mAB.success && mAB.records.length > 0 && Math.abs(mAB.records[0].value - 4) < 1e-4, `D.1: AB length measured 4.0 (got ${mAB.records[0]?.value})`);
+assert(mBC.success && mBC.records.length > 0 && Math.abs(mBC.records[0].value - 5) < 1e-4, `D.2: BC hypotenuse measured 5.0 (got ${mBC.records[0]?.value})`);
+assert(mCA.success && mCA.records.length > 0 && Math.abs(mCA.records[0].value - 3) < 1e-4, `D.3: CA length measured 3.0 (got ${mCA.records[0]?.value})`);
 
 // ----------------------------------------------------------------------------
 // SCENARIO E: Move Vertex & Kinematics
@@ -88,9 +88,9 @@ console.log('\n--- SCENARIO E: Move Vertex ---');
 const rMove = session.move('P_C', 0, 4);
 assert(rMove.success === true, 'E.1: Move P_C to (0, 4) succeeded');
 const mCAAfter = session.measure(segCAId, 'SEGMENT_LENGTH');
-assert(Math.abs(mCAAfter[0].value - 4) < 1e-4, `E.2: CA length updated dynamically to 4.0 (got ${mCAAfter[0].value})`);
+assert(mCAAfter.success && Math.abs(mCAAfter.records[0].value - 4) < 1e-4, `E.2: CA length updated dynamically to 4.0 (got ${mCAAfter.records[0]?.value})`);
 const mBCAfter = session.measure(segBCId, 'SEGMENT_LENGTH');
-assert(Math.abs(mBCAfter[0].value - Math.hypot(4, 4)) < 1e-4, 'E.3: BC length updated dynamically to ~5.6568');
+assert(mBCAfter.success && Math.abs(mBCAfter.records[0].value - Math.hypot(4, 4)) < 1e-4, 'E.3: BC length updated dynamically to ~5.6568');
 
 // ----------------------------------------------------------------------------
 // SCENARIO F: Dynamic Geometry VALID -> INVALID -> VALID
