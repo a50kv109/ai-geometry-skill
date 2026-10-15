@@ -18,6 +18,7 @@
 | **Predicate Verification** | `PERPENDICULAR_TO`, `PARALLEL_TO`, `EQUAL_LENGTH`, `POINT_ON_CIRCLE` with $\varepsilon=10^{-4}$ | `VERIFIED` |
 | **Epistemic Scratchpads** | Branching and rollbacks via `fork()` and `rollback()` | `VERIFIED` |
 | **Inter-Agent Exchange** | GSA v0.1 JSON envelope with PGS-2D payload and Zero-Trust verification | `VERIFIED` |
+| **Spectral Analysis** | Fourier spectral passport calculation and hybrid landmark-based reconstruction | `EXPERIMENTAL / RESEARCH` |
 
 ---
 

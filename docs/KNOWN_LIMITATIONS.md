@@ -67,3 +67,6 @@ To prevent false reasoning, external AI agents interacting with AI Geometry Skil
 - **Classification**: `CAPABILITY GAP / OUT OF SCOPE`
 - **Behavior**: The system operates strictly within $\mathbb{R}^2$ Euclidean planimetry. Spatial polyhedra and 3D cross-sections cannot be represented.
 
+### 9. Spectral Analysis Reconstruction Fidelity
+- **Classification**: `IMPLEMENTATION BEHAVIOR / GAP`
+- **Behavior**: Spectral passports (Fourier-based) provide derived shape descriptors (contour approximation). Exact vertex recovery from the spectral passport *alone* is not guaranteed due to reconstruction error in truncated harmonic series. Exact identity preservation is only guaranteed when using the **Hybrid Spectral-Geometric Passport** containing coordinate-bearing `Landmark`s.
